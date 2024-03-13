@@ -20,9 +20,9 @@ namespace AuthSample
             _sessionServices = sessionServices;
         }
 
-        public AuthValidationResultDto AuthenticateUserToken(string token)
+        public AuthValidationResultDto AuthenticateUserToken(string token, string publicKey)
         {
-            TokenValidationResultDto tokenValidationResult = _tokenValidator.ValidateToken(token);
+            TokenValidationResultDto tokenValidationResult = _tokenValidator.ValidateToken(token, publicKey);
 
             if (tokenValidationResult.Status != Enums.ValidationStatus.Success)
             {

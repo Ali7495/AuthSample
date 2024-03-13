@@ -13,23 +13,18 @@ namespace AuthSample
 {
     public class TokenValidator
     {
-        private readonly string _publicKey;
+        
 
-        public TokenValidator(string publicKey)
-        {
-            _publicKey = publicKey;
-        }
-
-        public TokenValidationResultDto ValidateToken(string token)
+        public TokenValidationResultDto ValidateToken(string token, string publicKey)
         {
             JwtSecurityTokenHandler tokenHandler = new();
 
             TokenValidationParameters tokenParameter = new()
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(_publicKey)),
-                ValidateIssuer = true,
-                ValidateAudience = true,
+                ValidateIssuerSigningKey = false,
+                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(publicKey)),
+                //ValidateIssuer = true,
+                //ValidateAudience = true,
                 RequireExpirationTime = true,
                 ValidateLifetime = true,
             };
