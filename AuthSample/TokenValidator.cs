@@ -20,6 +20,8 @@ namespace AuthSample
         {
             JwtSecurityTokenHandler tokenHandler = new();
 
+            // use RSA to import and convert the public key
+
             RSA rsa = RSA.Create();
             rsa.ImportRSAPublicKey(Convert.FromBase64String(publicKey), out int _);
 
@@ -38,6 +40,8 @@ namespace AuthSample
                 SecurityToken validatedToken;
 
                 ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenParameter, out validatedToken);
+
+                // get the needed fields of the token
 
                 string userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 string session = principal.FindFirst("Session")?.Value;
