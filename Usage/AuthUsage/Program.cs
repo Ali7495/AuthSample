@@ -1,6 +1,7 @@
 using AuthSample;
 using AuthSample.MockServices;
 using AuthSample.MocksInterfaces;
+using AuthUsage.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseTokenExtraction();
 app.UseAuthorization();
 
 app.MapControllers();

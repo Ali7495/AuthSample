@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
@@ -19,10 +20,13 @@ namespace AuthSample
         {
             JwtSecurityTokenHandler tokenHandler = new();
 
+            RSA rsa = RSA.Create();
+            rsa.ImportRSAPublicKey(Convert.FromBase64String(publicKey), out int _);
+
             TokenValidationParameters tokenParameter = new()
             {
                 ValidateIssuerSigningKey = false,
-                IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(publicKey)),
+                IssuerSigningKey = new RsaSecurityKey(rsa),
                 //ValidateIssuer = true,
                 //ValidateAudience = true,
                 RequireExpirationTime = true,
@@ -41,6 +45,7 @@ namespace AuthSample
 
                 return new() { UserId = userId, Session = session, Token = token, SessionExpirationDate = Convert.ToDateTime(expirationDate), Status = Enums.ValidationStatus.Success };
             }
+
             catch (SecurityTokenExpiredException)
             {
                 return new() { Status = Enums.ValidationStatus.Failed, Message = "The token has expired" };
